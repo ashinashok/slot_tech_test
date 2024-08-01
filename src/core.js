@@ -92,6 +92,24 @@ class Core {
         3,
         3);
 
+        const cloud1 = PIXI.Texture.from("cloud1");
+        const cloud2 = PIXI.Texture.from("cloud2");
+
+        // Create tiling sprites
+        const tilingSprite1 = new PIXI.TilingSprite(cloud1, window.screen.width, cloud1.height);
+        const tilingSprite2 = new PIXI.TilingSprite(cloud2, window.screen.width, cloud2.height);
+
+        // Add them to the stage
+        renderer.addChild(tilingSprite2); // Background cloud (further away)
+        renderer.addChild(tilingSprite1); // Foreground cloud (closer)
+
+        // Set up the ticker
+        const ticker = PIXI.Ticker.shared;
+        ticker.add(() => {
+            tilingSprite1.tilePosition.x += 0.5; // Faster movement
+            tilingSprite2.tilePosition.x += 0.2; // Slower movement
+        });
+
         const container = new PIXI.Container("reelSquares");
         container.x = 324;
         container.y = 95;

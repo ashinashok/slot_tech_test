@@ -13,9 +13,9 @@ export class Symbol extends Base {
      * @param {number} id - id used for the symbols
      * @param {string} name - name of the symbol asset
      */
-    constructor(id, name) {
+    constructor(id, name, value) {
         super();
-        this._create(id, name);
+        this._create(id, name, value);
     }
 
     /**
@@ -59,11 +59,13 @@ export class Symbol extends Base {
      * 
      * @param {number} id - id used for the symbols
      * @param {string} name - name of the symbol asset
+     * @param {number} value - pay of the symbol
      * @private
      */
-    _create(id, name) {
+    _create(id, name, value) {
         this._id = id;
         this._name = name;
+        this._value = value;
         const animations = PIXI.Assets.cache.get(this._name).data.animations;
         this._native = PIXI.AnimatedSprite.fromFrames(animations[`${this._name}Win`]);
     }

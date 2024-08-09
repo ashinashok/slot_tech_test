@@ -1,8 +1,15 @@
 import { Base } from "../base.js";
+import { balance } from "../balance.js"
+import pixiSound from "pixi-sound";
 
 export class WinDisplay extends Base {
     constructor() {
         super();
+        this._winSound = pixiSound.sound.Sound.from({
+            url: '/resource/sounds/spinwin.mp3',
+            loop: true,
+            volume: 0.5
+        });
         this.animSymbols = [];
     }
 
@@ -18,17 +25,24 @@ export class WinDisplay extends Base {
         });
 
         const promises = [];
-
+        let totalWin = 0;
+        
         // Check for matching symbols across reels at each position
         symArray.forEach(symbolsAtPosition => {
             if (this.isWinningLine(symbolsAtPosition, reels.length)) {
                 symbolsAtPosition.forEach(sym => {
                     this.animSymbols.push(sym);
+                    totalWin += sym._value;
+                    this._winSound.play();
                     promises.push(sym._native.play());
                 });
             }
         });
+        if(totalWin > 0) {
+            const currentBalance = balance._balance;
+            balance.updateBalance(currentBalance + totalWin);
 
+        }
         await Promise.all(promises);
     }
 
@@ -46,6 +60,7 @@ export class WinDisplay extends Base {
 
     async stopAnim() {
         // Stop animations and clear animSymbols
+        this._winSound.stop();
         this.animSymbols.forEach(element => {
             element.stop();
         });

@@ -2,7 +2,9 @@ import * as PIXI from "pixi.js";
 import { Reel } from "./reel.js";
 import { Base } from "../base.js";
 import { winDisplay } from "./win.js";
+import { balance } from "../balance.js"
 import { timerManager } from "../utils/timermanager.js";
+import pixiSound from "pixi-sound";
 
 /**
  * Reel manager controls multipler reels 
@@ -35,11 +37,18 @@ export class ReelManager extends Base {
         if (this._spinning) {
             return;
         }
+        this.updateBalance();
         this._spinning = true;
+        this._reelSpinSound.play();
         this._reels.forEach(reel => {
             reel.startSpin();
         });
        
+    }
+
+    updateBalance() {
+        const currentBalance = balance._balance;
+        balance.updateBalance(currentBalance - 0.20);
     }
 
     /**
@@ -62,6 +71,7 @@ export class ReelManager extends Base {
         winDisplay.showWin(this._reels);
         
         this._spinning = false;
+        this._reelSpinSound.stop();
     }
 
     /**
@@ -75,6 +85,11 @@ export class ReelManager extends Base {
         this._native.y = 80;
         this._createMask();
         this._createReels();
+        this._reelSpinSound = pixiSound.sound.Sound.from({
+            url: '/resource/sounds/reelspin.mp3',
+            loop: true,
+            volume: 0.5
+        });
     }
 
     /**

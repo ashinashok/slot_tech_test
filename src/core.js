@@ -5,7 +5,7 @@ import { symbolStore } from "./reels/symbolStore.js";
 import { ReelManager } from "./reels/reelsManager.js";
 import { timerManager } from "./utils/timermanager.js";
 import { Button } from "./button.js";
-
+import { balance } from "./balance.js"
 /**
  * Base entry point for the game
  * 
@@ -79,15 +79,15 @@ class Core {
         renderer.addChild(background);
 
         symbolStore.createSymbols([
-            {id: 0, name: "h2"},
-            {id: 1, name: "h3"},
-            {id: 2, name: "h4"},
-            {id: 3, name: "ace"},
-            {id: 4, name: "king"},
-            {id: 5, name: "queen"},
-            {id: 6, name: "jack"},
-            {id: 7, name: "ten"},
-            {id: 8, name: "nine"}
+            {id: 0, name: "h2", value:3.00},
+            {id: 1, name: "h3", value:2.0},
+            {id: 2, name: "h4", value:1.00},
+            {id: 3, name: "ace", value:0.80},
+            {id: 4, name: "king", value:0.60},
+            {id: 5, name: "queen", value:0.40},
+            {id: 6, name: "jack", value:0.20},
+            {id: 7, name: "ten", value:0.10 },
+            {id: 8, name: "nine", value:0.05}
         ],
         3,
         3);
@@ -137,6 +137,7 @@ class Core {
         button.y = 440;
         renderer.addChild(button.native);
 
+        renderer.addChild(balance.native);
     }
 }
 

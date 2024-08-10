@@ -33,4 +33,22 @@ export class Button extends Base {
         });
     }
 
+    /**
+     * Enable the button
+     */
+     enable() {
+        this._enabled = true;
+        this._native.alpha = 1; // Make button fully opaque
+        this._native.interactive = true; // Allow interaction
+    }
+
+    /**
+     * Disable the button
+     */
+    disable() {
+        this._enabled = false;
+        this._native.alpha = 0.5; // Make button semi-transparent
+        this._native.interactive = false; // Disable interaction
+    }
+
 }

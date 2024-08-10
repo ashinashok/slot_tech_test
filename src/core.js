@@ -6,6 +6,7 @@ import { ReelManager } from "./reels/reelsManager.js";
 import { timerManager } from "./utils/timermanager.js";
 import { Button } from "./button.js";
 import { balance } from "./balance.js"
+import { WinDisplayManager } from "./reels/winDisplayManager.js";
 /**
  * Base entry point for the game
  * 
@@ -128,15 +129,21 @@ class Core {
         this._reelManager = new ReelManager(3, 3, 125, 105);
         renderer.addChild(this._reelManager.native);
 
+        this.winDisplayManager = new WinDisplayManager();
+        this.winDisplayManager.initialize(renderer);
+
         const button = new Button("playActive", async() => {
-            this._reelManager.startSpin();            
+            button.disable(); // Disable button during the spin
+            this.winDisplayManager.stopWinDisplay(); 
+            this._reelManager.startSpin();
             await timerManager.startTimer(2000);
-            this._reelManager.stopSpin();    
+            await this._reelManager.stopSpin();
+            await this.winDisplayManager.showWin(this._reelManager.getReels()); // Show win if applicable
+            button.enable(); // Enable button after the spin finishes
         });
         button.x = 475;
         button.y = 440;
         renderer.addChild(button.native);
-
         renderer.addChild(balance.native);
     }
 }

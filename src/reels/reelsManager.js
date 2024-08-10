@@ -1,7 +1,6 @@
 import * as PIXI from "pixi.js";
 import { Reel } from "./reel.js";
 import { Base } from "../base.js";
-import { winDisplay } from "./win.js";
 import { balance } from "../balance.js"
 import { timerManager } from "../utils/timermanager.js";
 import pixiSound from "pixi-sound";
@@ -33,7 +32,6 @@ export class ReelManager extends Base {
      * Start the reels spinning called when button is clicked
      */
     startSpin() {
-        winDisplay.stopAnim();
         if (this._spinning) {
             return;
         }
@@ -44,6 +42,10 @@ export class ReelManager extends Base {
             reel.startSpin();
         });
        
+    }
+
+    getReels() {
+        return this._reels;
     }
 
     updateBalance() {
@@ -68,9 +70,8 @@ export class ReelManager extends Base {
         this._promises.push(this._reels[2].stopSpin());
         
         await Promise.all(this._promises);
-        winDisplay.showWin(this._reels);
-        
         this._spinning = false;
+        await timerManager.startTimer(250);
         this._reelSpinSound.stop();
     }
 
